@@ -8,12 +8,12 @@ LDLIBS =
 CPPFLAGS = $(CPPFLAGS) /Ox
 
 # TODO : Indicate where you have put the TBB installer
-TBB_DIR = ..\local
+TBB_DIR = .\local
 
 TBB_INC_DIR = $(TBB_DIR)\include
 
 # TODO: Choose the correct library for your build
-TBB_LIB_DIR = $(TBB_DIR)\lib\intel64\vc10
+TBB_LIB_DIR = $(TBB_DIR)\lib\ia32\vc10
 
 CPPFLAGS = $(CPPFLAGS) /I$(TBB_INC_DIR)
 LDFLAGS = $(LDFLAGS) /LIBPATH:$(TBB_LIB_DIR)
@@ -23,10 +23,10 @@ FOURIER_CORE_OBJS = src/fourier_transform.obj src/fourier_transform_register_fac
 
 # implementations
 FOURIER_IMPLEMENTATION_OBJS =  src/fast_fourier_transform.obj	src/direct_fourier_transform.obj \
-	src\dt10\direct_fourier_transform_parfor.obj \
-	src\dt10\fast_fourier_transform_taskgroup.obj \
-	src\dt10\fast_fourier_transform_parfor.obj \
-	src\dt10\fast_fourier_transform_combined.obj \
+	src\tm1810\direct_fourier_transform_parfor.obj \
+	src\tm1810\fast_fourier_transform_taskgroup.obj \
+	src\tm1810\fast_fourier_transform_parfor.obj \
+	src\tm1810\fast_fourier_transform_combined.obj \
 	src\dt10\fast_fourier_transform_opt.obj
 
 FOURIER_OBJS = $(FOURIER_CORE_OBJS) $(FOURIER_IMPLEMENTATION_OBJS)

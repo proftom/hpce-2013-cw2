@@ -1,0 +1,48 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+CreateTransform	C:\Repository\hpce-2013-cw2\src\fourier_transform.cpp	81;"	kind:function	line:81	language:C++	class:hpce::fourier_transform	signature:(const std::string &name)
+Create_direct_fourier_transform	C:\Repository\hpce-2013-cw2\src\direct_fourier_transform.cpp	75;"	kind:function	line:75	language:C++	namespace:hpce	signature:()
+Create_fast_fourier_transform	C:\Repository\hpce-2013-cw2\src\fast_fourier_transform.cpp	80;"	kind:function	line:80	language:C++	namespace:hpce	signature:()
+GetTransformFactoryNames	C:\Repository\hpce-2013-cw2\src\fourier_transform.cpp	68;"	kind:function	line:68	language:C++	class:hpce::fourier_transform	signature:()
+RegisterDefaultFactories	C:\Repository\hpce-2013-cw2\src\fourier_transform_register_factories.cpp	17;"	kind:function	line:17	language:C++	class:hpce::fourier_transform	signature:()
+RegisterTransformFactory	C:\Repository\hpce-2013-cw2\src\fourier_transform.cpp	58;"	kind:function	line:58	language:C++	class:hpce::fourier_transform	signature:(std::string name, fourier_transform_factory_t factory)
+backwards	C:\Repository\hpce-2013-cw2\src\fourier_transform.cpp	39;"	kind:function	line:39	language:C++	class:hpce::fourier_transform	signature:(const complex_vec_t &in, size_t n) const
+backwards_impl	C:\Repository\hpce-2013-cw2\src\direct_fourier_transform.cpp	42;"	kind:function	line:42	language:C++	class:hpce::direct_fourier_transform	access:protected	implementation:virtual	signature:( size_t n, const std::complex<double> & , const std::complex<double> *pIn, size_t sIn, std::complex<double> *pOut, size_t sOut ) const
+backwards_impl	C:\Repository\hpce-2013-cw2\src\fast_fourier_transform.cpp	57;"	kind:function	line:57	language:C++	class:hpce::fast_fourier_transform	access:protected	implementation:virtual	signature:( size_t n, const std::complex<double> &wn, const std::complex<double> *pIn, size_t sIn, std::complex<double> *pOut, size_t sOut ) const
+calc_padded_size	C:\Repository\hpce-2013-cw2\src\direct_fourier_transform.cpp	14;"	kind:function	line:14	language:C++	class:hpce::direct_fourier_transform	access:protected	implementation:virtual	signature:(size_t n) const
+calc_padded_size	C:\Repository\hpce-2013-cw2\src\fast_fourier_transform.cpp	14;"	kind:function	line:14	language:C++	class:hpce::fast_fourier_transform	access:protected	implementation:virtual	signature:(size_t n) const
+direct_fourier_transform	C:\Repository\hpce-2013-cw2\src\direct_fourier_transform.cpp	9;"	kind:class	line:9	language:C++	namespace:hpce	file:	inherits:fourier_transform
+fast_fourier_transform	C:\Repository\hpce-2013-cw2\src\fast_fourier_transform.cpp	9;"	kind:class	line:9	language:C++	namespace:hpce	file:	inherits:fourier_transform
+forwards	C:\Repository\hpce-2013-cw2\src\fourier_transform.cpp	20;"	kind:function	line:20	language:C++	class:hpce::fourier_transform	signature:(const complex_vec_t &in) const
+forwards_impl	C:\Repository\hpce-2013-cw2\src\direct_fourier_transform.cpp	19;"	kind:function	line:19	language:C++	class:hpce::direct_fourier_transform	access:protected	implementation:virtual	signature:( size_t n, const std::complex<double> & , const std::complex<double> *pIn, size_t sIn, std::complex<double> *pOut, size_t sOut ) const
+forwards_impl	C:\Repository\hpce-2013-cw2\src\fast_fourier_transform.cpp	26;"	kind:function	line:26	language:C++	class:hpce::fast_fourier_transform	access:protected	implementation:virtual	signature:( size_t n, const std::complex<double> &wn, const std::complex<double> *pIn, size_t sIn, std::complex<double> *pOut, size_t sOut ) const
+hpce	C:\Repository\hpce-2013-cw2\src\direct_fourier_transform.cpp	6;"	kind:namespace	line:6	language:C++	file:
+hpce	C:\Repository\hpce-2013-cw2\src\fast_fourier_transform.cpp	6;"	kind:namespace	line:6	language:C++	file:
+hpce	C:\Repository\hpce-2013-cw2\src\fourier_transform.cpp	7;"	kind:namespace	line:7	language:C++	file:
+hpce	C:\Repository\hpce-2013-cw2\src\fourier_transform_register_factories.cpp	3;"	kind:namespace	line:3	language:C++	file:
+is_quadratic	C:\Repository\hpce-2013-cw2\src\direct_fourier_transform.cpp	71;"	kind:function	line:71	language:C++	class:hpce::direct_fourier_transform	access:public	implementation:virtual	signature:() const
+is_quadratic	C:\Repository\hpce-2013-cw2\src\fast_fourier_transform.cpp	76;"	kind:function	line:76	language:C++	class:hpce::fast_fourier_transform	access:public	implementation:virtual	signature:() const
+main	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	111;"	kind:function	line:111	language:C++	signature:(int argc, char *argv[])
+main	C:\Repository\hpce-2013-cw2\src\time_fourier_transform.cpp	34;"	kind:function	line:34	language:C++	signature:(int argc, char *argv[])
+name	C:\Repository\hpce-2013-cw2\src\direct_fourier_transform.cpp	68;"	kind:function	line:68	language:C++	class:hpce::direct_fourier_transform	access:public	implementation:virtual	signature:() const
+name	C:\Repository\hpce-2013-cw2\src\fast_fourier_transform.cpp	73;"	kind:function	line:73	language:C++	class:hpce::fast_fourier_transform	access:public	implementation:virtual	signature:() const
+randomUniformComplex	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	27;"	kind:function	line:27	language:C++	file:	signature:()
+randomUniformComplex	C:\Repository\hpce-2013-cw2\src\time_fourier_transform.cpp	26;"	kind:function	line:26	language:C++	file:	signature:()
+randomUniformInt	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	15;"	kind:function	line:15	language:C++	file:	signature:(unsigned n)
+randomUniformReal	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	21;"	kind:function	line:21	language:C++	file:	signature:()
+randomUniformReal	C:\Repository\hpce-2013-cw2\src\time_fourier_transform.cpp	20;"	kind:function	line:20	language:C++	file:	signature:()
+root_of_unity	C:\Repository\hpce-2013-cw2\src\fourier_transform.cpp	12;"	kind:function	line:12	language:C++	class:hpce::fourier_transform	signature:(size_t n) const
+s_currentTest	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	34;"	kind:variable	line:34	language:C++	file:
+s_factories	C:\Repository\hpce-2013-cw2\src\fourier_transform.cpp	10;"	kind:member	line:10	language:C++	namespace:hpce	file:
+s_totalFailed	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	35;"	kind:variable	line:35	language:C++	file:
+s_totalPassed	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	36;"	kind:variable	line:36	language:C++	file:
+s_urng	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	13;"	kind:variable	line:13	language:C++	file:
+s_urng	C:\Repository\hpce-2013-cw2\src\time_fourier_transform.cpp	18;"	kind:variable	line:18	language:C++	file:
+testDCTransform	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	62;"	kind:function	line:62	language:C++	file:	signature:(const fourier_transform *pTransform, size_t n)
+testUniformRandom	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	90;"	kind:function	line:90	language:C++	file:	signature:(const fourier_transform *pTransform, size_t n)
+verifyClose	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	49;"	kind:function	line:49	language:C++	file:	signature:(const T&got, const T &want, double absTol, const std::string &message)
+verifyEqual	C:\Repository\hpce-2013-cw2\src\test_fourier_transform.cpp	39;"	kind:function	line:39	language:C++	file:	signature:(const T&got, const T &want, const std::string &message)
