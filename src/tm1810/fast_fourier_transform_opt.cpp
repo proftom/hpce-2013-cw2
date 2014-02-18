@@ -5,10 +5,11 @@
 #include "tbb/task_group.h"
 #include "tbb/parallel_for.h"
 
+#define problemSizeToParallise 4096
 namespace hpce
 {
 	namespace tm1810 {
-		class fast_fourier_transform_combined
+		class fast_fourier_transform_opt
 			: public fourier_transform
 		{
 		protected:
@@ -42,49 +43,52 @@ namespace hpce
 					pOut[sOut] = pIn[0]-pIn[sIn];
 				}else{
 					size_t m = n/2;
-
+					//Problem has to be a decent size
+					if (m >= 65536) {
 					group.run([=]() {forwards_impl(m,wn*wn,pIn,2*sIn,pOut,sOut); });
 					group.run([=]()	{forwards_impl(m,wn*wn,pIn+sIn,2*sIn,pOut+sOut*m,sOut);});
 					group.wait();
+					} else {
+						forwards_impl(m,wn*wn,pIn,2*sIn,pOut,sOut);
+						forwards_impl(m,wn*wn,pIn+sIn,2*sIn,pOut+sOut*m,sOut);
+					}
 					
-				//We only want the big problems to be broken into smaller problems
-				//Therefore K shouldn't be to small as m/K will be too large 
-				//Meaning lots of small problems shall be generated
-				//Some problems will be too small compared to the scheduling overhead
-				//Espicially as the recursion breaks them into smaller probs
-				size_t K = 1024;
-				size_t problemSize = m/K;
-				std::complex<double> w1=std::complex<double>(1.0, 0.0);
+					//We only want the big problems to be broken into smaller problems
+					//Therefore K shouldn't be to small as m/K will be too large 
+					//Meaning lots of small problems shall be generated
+					//Some problems will be too small compared to the scheduling overhead
+					//Espicially as the recursion breaks them into smaller probs
+					size_t K = problemSizeToParallise;
+					size_t problemSize = m/K;
+					std::complex<double> w1=std::complex<double>(1.0, 0.0);
+					
+					tbb::parallel_for((size_t) 0, problemSize, [=](size_t j0){
+						std::complex<double>  w = w1 * std::pow(wn,j0*K);
+						//std::cerr << w << "\n";
+						for (size_t j1=0; j1<K; j1++){
+						  size_t j=j0*K+j1;
+						  std::complex<double> t1 = w*pOut[m+j];
+						  std::complex<double> t2 = pOut[j]-t1;
+						  pOut[j] = pOut[j]+t1;                 /*  pOut[j] = pOut[j] + w^i pOut[m+j] */
+						  pOut[j+m] = t2;                          /*  pOut[j] = pOut[j] - w^i pOut[m+j] */
+						  w = w*wn;
+						} 
+					} );
 				
-				tbb::parallel_for((size_t) 0, problemSize, [=](size_t j0){
-					std::complex<double>  w = w1 * std::pow(wn,j0*K);
-					//std::cerr << w << "\n";
-					for (size_t j1=0; j1<K; j1++){
-					  size_t j=j0*K+j1;
-					  std::complex<double> t1 = w*pOut[m+j];
-					  std::complex<double> t2 = pOut[j]-t1;
-					  pOut[j] = pOut[j]+t1;                 /*  pOut[j] = pOut[j] + w^i pOut[m+j] */
-					  pOut[j+m] = t2;                          /*  pOut[j] = pOut[j] - w^i pOut[m+j] */
-					  w = w*wn;
-					} 
-				} );
-				
-				size_t modValue = m%K;
-				if (modValue == 0)  
-					return;
+					size_t modValue = m%K;
+					if (modValue == 0)  
+						return;
 
-				//Remainder as m/K might not be integer
-				for(size_t j0=problemSize; j0<problemSize+1; j0++){
-					std::complex<double>  w = w1 * std::pow(wn,j0*K);
-					for (size_t j1=0; j1<(modValue); j1++){
-					  size_t j=j0*K+j1;
+					//Get rid of the inner loop
+					std::complex<double>  w = w1 * std::pow(wn,problemSize*K);
+					for (size_t j=problemSize;j<modValue;j++){
 					  std::complex<double> t1 = w*pOut[m+j];
 					  std::complex<double> t2 = pOut[j]-t1;
-					  pOut[j] = pOut[j]+t1;                 
-					  pOut[j+m] = t2;                          
+					  pOut[j] = pOut[j]+t1;
+					  pOut[j+m] = t2;
 					  w = w*wn;
 					}
-				}
+			
 				}
 			}
 			
@@ -105,15 +109,15 @@ namespace hpce
 			
 		public:
 			virtual std::string name() const
-			{ return "hpce.tm1810.fast_fourier_transform_combined"; }
+			{ return "hpce.tm1810.fast_fourier_transform_opt"; }
 			
 			virtual bool is_quadratic() const
 			{ return false; }
 		};
 
-		std::shared_ptr<fourier_transform> Create_fast_fourier_transform_combined()
+		std::shared_ptr<fourier_transform> Create_fast_fourier_transform_opt()
 		{
-			return std::make_shared<fast_fourier_transform_combined>();
+			return std::make_shared<fast_fourier_transform_opt>();
 		}
 	}
 }; // namespace hpce

@@ -13,6 +13,7 @@ namespace tm1810{
 	std::shared_ptr<fourier_transform> Create_fast_fourier_transform_taskgroup();
 	std::shared_ptr<fourier_transform> Create_fast_fourier_transform_parfor();
 	std::shared_ptr<fourier_transform> Create_fast_fourier_transform_combined();
+	std::shared_ptr<fourier_transform> Create_fast_fourier_transform_opt();
 }
 
 
@@ -28,6 +29,7 @@ void fourier_transform::RegisterDefaultFactories()
 	RegisterTransformFactory("hpce.tm1810.fast_fourier_transform_taskgroup", hpce::tm1810::Create_fast_fourier_transform_taskgroup);
 	RegisterTransformFactory("hpce.tm1810.fast_fourier_transform_parfor", hpce::tm1810::Create_fast_fourier_transform_parfor);
 	RegisterTransformFactory("hpce.tm1810.fast_fourier_transform_combined", hpce::tm1810::Create_fast_fourier_transform_combined);
+	RegisterTransformFactory("hpce.tm1810.fast_fourier_transform_opt", hpce::tm1810::Create_fast_fourier_transform_opt);
 	
 }
 	

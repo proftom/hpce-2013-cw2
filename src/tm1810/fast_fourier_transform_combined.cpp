@@ -52,7 +52,7 @@ namespace hpce
 				//Meaning lots of small problems shall be generated
 				//Some problems will be too small compared to the scheduling overhead
 				//Espicially as the recursion breaks them into smaller probs
-				size_t K = 1024;
+				size_t K = 2048;
 				size_t problemSize = m/K;
 				std::complex<double> w1=std::complex<double>(1.0, 0.0);
 				

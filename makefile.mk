@@ -27,7 +27,7 @@ FOURIER_IMPLEMENTATION_OBJS =  src/fast_fourier_transform.obj	src/direct_fourier
 	src\tm1810\fast_fourier_transform_taskgroup.obj \
 	src\tm1810\fast_fourier_transform_parfor.obj \
 	src\tm1810\fast_fourier_transform_combined.obj \
-	src\dt10\fast_fourier_transform_opt.obj
+	src\tm1810\fast_fourier_transform_opt.obj
 
 FOURIER_OBJS = $(FOURIER_CORE_OBJS) $(FOURIER_IMPLEMENTATION_OBJS)
 
