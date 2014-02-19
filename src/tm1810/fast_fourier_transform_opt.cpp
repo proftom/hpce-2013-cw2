@@ -6,6 +6,7 @@
 #include "tbb/parallel_for.h"
 
 #define problemSizeToParallise 4096
+#define K 4096
 namespace hpce
 {
 	namespace tm1810 {
@@ -25,63 +26,94 @@ namespace hpce
 				
 				return ret;
 			}
-
+			
+			static const unsigned U = 1<<4; //base case unroll
+			
 			virtual void forwards_impl(
 				size_t n,	const std::complex<double> &wn,
 				const std::complex<double> *pIn, size_t sIn,
 				std::complex<double> *pOut, size_t sOut
 			) const 
 			{
-				tbb::task_group group;
+				
 			
 				assert(n>0);
-				
+				if(n==U) {
+					forwards_impl_unroll(U,wn,pIn,sIn,pOut,sOut);
+				}
 				if (n == 1){
 					pOut[0] = pIn[0];
 				}else if (n == 2){
 					pOut[0] = pIn[0]+pIn[sIn];
-					pOut[sOut] = pIn[0]-pIn[sIn];
-				}else{
+					pOut[1] = pIn[0]-pIn[sIn];
+				} else {
+				
 					size_t m = n/2;
-					//Problem has to be a decent size
-					if (m >= 65536) {
-					group.run([=]() {forwards_impl(m,wn*wn,pIn,2*sIn,pOut,sOut); });
-					group.run([=]()	{forwards_impl(m,wn*wn,pIn+sIn,2*sIn,pOut+sOut*m,sOut);});
-					group.wait();
+					//Problem has to be a decent size to amortise scheduling cost
+					if (m > problemSizeToParallise) {
+						tbb::task_group group;
+						group.run([=]() {forwards_impl(m,wn*wn,pIn,2*sIn,pOut,sOut); });
+						group.run([=]()	{forwards_impl(m,wn*wn,pIn+sIn,2*sIn,pOut+sOut*m,sOut);});
+						group.wait();
 					} else {
 						forwards_impl(m,wn*wn,pIn,2*sIn,pOut,sOut);
 						forwards_impl(m,wn*wn,pIn+sIn,2*sIn,pOut+sOut*m,sOut);
 					}
 					
-					//We only want the big problems to be broken into smaller problems
-					//Therefore K shouldn't be to small as m/K will be too large 
-					//Meaning lots of small problems shall be generated
-					//Some problems will be too small compared to the scheduling overhead
-					//Espicially as the recursion breaks them into smaller probs
-					size_t K = problemSizeToParallise;
-					size_t problemSize = m/K;
-					std::complex<double> w1=std::complex<double>(1.0, 0.0);
-					
-					tbb::parallel_for((size_t) 0, problemSize, [=](size_t j0){
-						std::complex<double>  w = w1 * std::pow(wn,j0*K);
-						//std::cerr << w << "\n";
-						for (size_t j1=0; j1<K; j1++){
-						  size_t j=j0*K+j1;
-						  std::complex<double> t1 = w*pOut[m+j];
-						  std::complex<double> t2 = pOut[j]-t1;
-						  pOut[j] = pOut[j]+t1;                 /*  pOut[j] = pOut[j] + w^i pOut[m+j] */
-						  pOut[j+m] = t2;                          /*  pOut[j] = pOut[j] - w^i pOut[m+j] */
-						  w = w*wn;
-						} 
-					} );
-				
-					size_t modValue = m%K;
-					if (modValue == 0)  
-						return;
 
-					//Get rid of the inner loop
-					std::complex<double>  w = w1 * std::pow(wn,problemSize*K);
-					for (size_t j=problemSize;j<modValue;j++){
+						//If the problem is too little to warrant parallel execution
+                        if (m <= K){
+                                std::complex<double> w = std::complex<double>(1.0, 0.0);
+                                for (size_t j = 0; j<m; j++){
+                                    std::complex<double> t1 = w*pOut[m+j];
+									std::complex<double> t2 = pOut[j]-t1;
+									pOut[j] = pOut[j]+t1;                 
+									pOut[j+m] = t2;                       
+									w = w*wn;
+                                }
+                        } else {
+							tbb::parallel_for(size_t(0), m/K, [=](size_t j0){
+									std::complex<double> w = std::pow(wn, j0*K);
+									for (size_t j1 = j0*K; j1 < (j0+1)*K; j1++){
+										std::complex<double> t1 = w*pOut[m+j1];
+										std::complex<double> t2 = pOut[j1]-t1;
+										pOut[j1] = pOut[j1]+t1;                 
+										pOut[j1+m] = t2;                       
+										w = w*wn;
+									}
+							}
+							);
+                        }
+			
+				}
+			}
+			
+#if defined (_MSC_VER)
+        __forceinline static inline void forwards_impl_unroll(
+#elif defined(__GNUC__)
+        __attribute__((always_inline)) static inline void forwards_impl_unroll(
+#else
+        static inline void forwards_impl_unroll(
+#endif
+                size_t n, const std::complex<double> &wn,
+                const std::complex<double> *pIn, size_t sIn,
+                std::complex<double> *pOut, size_t sOut
+        )
+			{
+			
+				//assert(n>0);
+				
+				if (n == 2){
+					pOut[0] = pIn[0]+pIn[sIn];
+					pOut[1] = pIn[0]-pIn[sIn];
+				} else{
+					size_t m = n/2;
+
+					forwards_impl_unroll(m,wn*wn,pIn,2*sIn,pOut,sOut);
+					forwards_impl_unroll(m,wn*wn,pIn+sIn,2*sIn,pOut+sOut*m,sOut);
+
+					std::complex<double>  w = std::complex<double>(1.0, 0.0);
+					for (size_t j=0;j<m;j++){
 					  std::complex<double> t1 = w*pOut[m+j];
 					  std::complex<double> t2 = pOut[j]-t1;
 					  pOut[j] = pOut[j]+t1;
