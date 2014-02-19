@@ -27,8 +27,6 @@ namespace hpce
 				return ret;
 			}
 			
-			static const unsigned U = 1<<4; //base case unroll
-			
 			virtual void forwards_impl(
 				size_t n,	const std::complex<double> &wn,
 				const std::complex<double> *pIn, size_t sIn,
