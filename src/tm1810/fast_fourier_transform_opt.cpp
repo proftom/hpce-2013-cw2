@@ -38,8 +38,8 @@ namespace hpce
 				
 			
 				assert(n>0);
-				if(n==U) {
-					forwards_impl_unroll(U,wn,pIn,sIn,pOut,sOut);
+				if(n==16) {
+					forwards_impl_unroll(16,wn,pIn,sIn,pOut,sOut);
 				}
 				if (n == 1){
 					pOut[0] = pIn[0];
@@ -88,13 +88,9 @@ namespace hpce
 				}
 			}
 			
-#if defined (_MSC_VER)
-        __forceinline static inline void forwards_impl_unroll(
-#elif defined(__GNUC__)
-        __attribute__((always_inline)) static inline void forwards_impl_unroll(
-#else
+
         static inline void forwards_impl_unroll(
-#endif
+
                 size_t n, const std::complex<double> &wn,
                 const std::complex<double> *pIn, size_t sIn,
                 std::complex<double> *pOut, size_t sOut
